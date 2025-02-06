@@ -8,6 +8,14 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 
 router.use(cookieParser());
+router.get("/test", async (req, res)=>{
+  try{
+    res.status(200).send("your backend service on render is live")
+  }catch(error){
+    res.status(400).send(error)
+  }
+})
+
 // Create a new user
 router.post("/users", async (req, res) => {
   try {
