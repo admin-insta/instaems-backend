@@ -7,7 +7,7 @@ const { validateSignupData } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 
-app.use(cookieParser());
+router.use(cookieParser());
 // Create a new user
 router.post("/users", async (req, res) => {
   try {
