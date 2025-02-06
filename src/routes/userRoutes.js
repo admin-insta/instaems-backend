@@ -40,7 +40,7 @@ router.post("/users", async (req, res) => {
 //Login Api
 router.post("/login", async (req, res) => {
   try {
-    validateSignupData(req);
+    
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if (!user) {
