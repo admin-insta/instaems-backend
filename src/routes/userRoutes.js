@@ -8,16 +8,17 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 
 router.use(cookieParser());
-router.get("/test", async (req, res)=>{
-  try{
-    res.status(200).send("your backend service on render is live")
-  }catch(error){
-    res.status(400).send(error)
+//Test Api
+router.get("/test", async (req, res) => {
+  try {
+    res.status(200).json("your backend service on render is live");
+  } catch (error) {
+    res.status(400).send(error);
   }
-})
+});
 
 // Create a new user
-router.post("/users", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     validateSignupData(req);
     const { name, email, password, phoneNumber } = req.body;
@@ -40,7 +41,6 @@ router.post("/users", async (req, res) => {
 //Login Api
 router.post("/login", async (req, res) => {
   try {
-    
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if (!user) {
@@ -63,6 +63,16 @@ router.post("/login", async (req, res) => {
     }
   } catch (error) {
     res.status(400).send(error.message);
+  }
+});
+
+//Logout API
+router.post("/logout", async (req, res) => {
+  try {
+    res.cookie("token", null, { expires: new Date(Date.now()) });
+    res.status(200).send("Logout Succesfully");
+  } catch (error) {
+    res.status(400).send("Something went wrong while logout");
   }
 });
 
