@@ -2,7 +2,7 @@ const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-
+const bcrypt = require('bcryptjs');
 // Create a new user
 router.post('/users', async (req, res) => {
   try {
