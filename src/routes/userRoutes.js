@@ -1,24 +1,10 @@
 const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
-
-const { validateSignupData } = require("../utils/validation");
-const bcrypt = require("bcrypt");
-const cookieParser = require("cookie-parser");
-
-router.use(cookieParser());
-//Test Api
-router.get("/test", async (req, res) => {
-  try {
-    res.status(200).json("your backend service on render is live");
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+const { v4: uuidv4 } = require('uuid');
 
 // Create a new user
-router.post("/signup", async (req, res) => {
+router.post('/users', async (req, res) => {
   try {
     validateSignupData(req);
     const { name, email, password, phoneNumber } = req.body;
@@ -77,7 +63,7 @@ router.post("/logout", async (req, res) => {
 });
 
 // Read all users
-router.get("/users", async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.status(200).send(users);
@@ -87,7 +73,7 @@ router.get("/users", async (req, res) => {
 });
 
 // Read a user by ID
-router.get("/users/:id", async (req, res) => {
+router.get('/users/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
     if (!user) {
@@ -100,7 +86,7 @@ router.get("/users/:id", async (req, res) => {
 });
 
 // Update a user by ID
-router.patch("/users/:id", async (req, res) => {
+router.patch('/users/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -116,7 +102,7 @@ router.patch("/users/:id", async (req, res) => {
 });
 
 // Delete a user by ID
-router.delete("/users/:id", async (req, res) => {
+router.delete('/users/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id).select(
       "-password"

@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
 const userSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -10,7 +9,6 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -25,8 +23,8 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
-    required: true,
     unique: true,
+    sparse: true // Ensures uniqueness for non-null values
   },
   designation: {
     type: String,
@@ -62,25 +60,10 @@ const userSchema = new mongoose.Schema({
 {timestamps:true}
 );
 
-userSchema.methods.validatePassword = async function (passwordInputByUser) {
-  const user = this;
-  const passwordHash = user.password;
-  const isPasswordValid = await bcrypt.compare(
-    passwordInputByUser,
-    passwordHash
-  );
-  return isPasswordValid;
+userSchema.methods.validatePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.getJWT = async function () {
-  const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
-  const user = this;
-  const token = await jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
-    expiresIn: "7d",
-  });
-  return token;
-};
-
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
