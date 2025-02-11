@@ -3,18 +3,27 @@ const User = require("../models/user");
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
-// Create a new user
+// const validateSignupData = require("../utils/validation")
+// Create a new user 
 router.post('/users', async (req, res) => {
   try {
-    validateSignupData(req);
-    const { name, email, password, phoneNumber } = req.body;
+    // validateSignupData(req);
+    const { name, email, password, phoneNumber,designation,
+      dob,
+      address,
+      joiningDate, } = req.body;
     const passworHash = await bcrypt.hash(password, 10);
     const user = new User({
-      name,
+      name, 
       email,
       phoneNumber,
       password: passworHash,
       userId: uuidv4(),
+      designation,
+      dob,
+      address,
+      joiningDate,
+
     });
     await user.save();
     // const { password, ...userWithoutPassword } = user.toObject();
