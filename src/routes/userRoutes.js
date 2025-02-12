@@ -1,20 +1,26 @@
 const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcryptjs');
+const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcryptjs");
 // const validateSignupData = require("../utils/validation")
-// Create a new user 
-router.post('/users', async (req, res) => {
+// Create a new user
+router.post("/users", async (req, res) => {
   try {
     // validateSignupData(req);
-    const { name, email, password, phoneNumber,designation,
+    const {
+      name,
+      email,
+      password,
+      phoneNumber,
+      designation,
       dob,
       address,
-      joiningDate, } = req.body;
+      joiningDate,
+    } = req.body;
     const passworHash = await bcrypt.hash(password, 10);
     const user = new User({
-      name, 
+      name,
       email,
       phoneNumber,
       password: passworHash,
@@ -23,7 +29,6 @@ router.post('/users', async (req, res) => {
       dob,
       address,
       joiningDate,
-
     });
     await user.save();
     // const { password, ...userWithoutPassword } = user.toObject();
@@ -72,7 +77,7 @@ router.post("/logout", async (req, res) => {
 });
 
 // Read all users
-router.get('/users', async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.status(200).send(users);
@@ -82,7 +87,7 @@ router.get('/users', async (req, res) => {
 });
 
 // Read a user by ID
-router.get('/users/:id', async (req, res) => {
+router.get("/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
     if (!user) {
@@ -95,7 +100,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 // Update a user by ID
-router.patch('/users/:id', async (req, res) => {
+router.patch("/users/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -111,7 +116,7 @@ router.patch('/users/:id', async (req, res) => {
 });
 
 // Delete a user by ID
-router.delete('/users/:id', async (req, res) => {
+router.delete("/users/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id).select(
       "-password"
